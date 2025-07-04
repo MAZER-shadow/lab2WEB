@@ -13,14 +13,17 @@ import org.example.lab2web3231202.service.*;
 
 @WebServlet(name = "mainServlet", value = "/main-servlet")
 public class MainServlet extends HttpServlet {
-    private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-    private final ResponseWriter responseWriter = new ResponseWriter();
-    private final Validator validator = new Validator();
+    private ResponseWriter responseWriter;
+    private Validator validator;
     private final ResultCreator resultCreator = new ResultCreator();
     private final ResultAppender resultAppender = new ResultAppender();
     private final ResultLoader resultLoader = new ResultLoader();
 
     public void init() {
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        responseWriter = new ResponseWriter(mapper);
+        validator = new Validator(mapper);
+
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -32,13 +35,13 @@ public class MainServlet extends HttpServlet {
         long timeStart = System.nanoTime();
         byte[] requestBody = request.getInputStream().readAllBytes();
         try {
-            validator.isValidData(requestBody, mapper); // валидация тела запроса
+            validator.isValidData(requestBody); // валидация тела запроса
             HitResult hitResult = resultCreator.createHitResult(requestBody, mapper, now); // делаем результат попадания
             resultAppender.appendResult(hitResult, request); //добавляем результат в список всех результатов у пользователя
             hitResult.setExecutionTime(System.nanoTime() - timeStart);// ставим полученному результату время выполнения
-            responseWriter.writeResponse(response, hitResult, mapper);// отправляем респонс
+            responseWriter.writeResponse(response, hitResult);// отправляем респонс
         } catch (InvalidDataException e) {
-            responseWriter.writeResponse(response, e.getMessage(), mapper, true);// отправляем респонс
+            responseWriter.writeResponse(response, e.getMessage(), true);// отправляем респонс
         }
     }
 

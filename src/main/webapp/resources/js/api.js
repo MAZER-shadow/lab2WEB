@@ -3,7 +3,7 @@ import { showNotification } from './utils.js'; // Импортируем showNot
 
 export async function fetchHistory() {
     try {
-        const response = await fetch('http://localhost:8080/lab2WEB3231202_war_exploded/main-servlet', {
+        const response = await fetch('http://localhost:3002/hit_result', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
@@ -22,7 +22,7 @@ export async function fetchHistory() {
 
 export async function sendCoordinates(data) {
     try {
-        const response = await fetch('http://localhost:8080/lab2WEB3231202_war_exploded/main-servlet', {
+        const response = await fetch('http://localhost:3002/hit_result', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,8 +42,8 @@ export async function sendCoordinates(data) {
 
 export async function clearResults() {
     try {
-        const response = await fetch('http://localhost:8080/lab2WEB3231202_war_exploded/clear-servlet', {
-            method: 'POST',
+        const response = await fetch('http://localhost:3002/hit_result', {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             }

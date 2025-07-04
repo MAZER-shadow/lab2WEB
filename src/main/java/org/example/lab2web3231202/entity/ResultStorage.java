@@ -6,6 +6,7 @@ public class ListResult {
     private ArrayList<HitResult> results;
 
     public ListResult() {
+        results = new ArrayList<>();
     }
 
     public ListResult(ArrayList<HitResult> results) {
